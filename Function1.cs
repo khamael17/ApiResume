@@ -11,6 +11,7 @@ using Microsoft.Azure.Cosmos;
 using System.Linq;
 using System.Collections.Generic;
 using System.Net.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace projectresumeapi
 {
@@ -43,9 +44,10 @@ namespace projectresumeapi
 
             List<Idy> FinalResult = new List<Idy>();        //creating a list for the branches
                                                             //passing the req Url parameters to variables
-       
 
-            Container LocationContainer = new CosmosClient("AccountEndpoint=https://resumeproject.documents.azure.com:443/;AccountKey=r7ycZk0G4y4Ri56MTaFeHjIkGBkUruYXwyDxa3VvGbSihBDUKuFtxgd6yXwJSW5NJ8STFIyyBLxJYx9I7ojOcw==;").GetContainer("resumest", "idy");
+            string connectionString = Environment.GetEnvironmentVariable("conn",
+EnvironmentVariableTarget.Process);
+            Container LocationContainer = new CosmosClient(connectionString).GetContainer("resumest", "info");
 
             foreach (var loc in LocationContainer.GetItemLinqQueryable<Idy>(true, null, null, null))
             {
@@ -53,6 +55,22 @@ namespace projectresumeapi
             }
             return Task.FromResult(FinalResult);
         }
+
+
+        //public static class ConfigurationHelper
+        //{
+        //    public static string GetByName(string configKeyName)
+        //    {
+        //        var config = new ConfigurationBuilder()
+        //            .AddJsonFile("local.settings.json")
+        //            .Build();
+
+        //        IConfigurationSection section = config.GetSection(configKeyName);
+
+        //        return section.Value;
+        //    }
+        //}
+
     }
 
 
