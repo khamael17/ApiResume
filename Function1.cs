@@ -103,7 +103,7 @@ namespace projectresumeapi
 
 
             // Get the connection string from app settings
-            string connectionString = "DefaultEndpointsProtocol=https;AccountName=storageresume1;AccountKey=Vw/0rvPnzFHJNjrYu9wH0IMMe+d8qWooGWqYqkCKefWRUTGXEagwhKezxBpJgJwHvZw2OfW3Epk7+AStR2FK8g==;EndpointSuffix=core.windows.net";
+            string connectionString = ConfigurationManager.AppSettings["connectionString"];
             string queueName = "messagequeue";
             // Instantiate a QueueClient which will be used to manipulate the queue
             QueueClient queueClient = new QueueClient(connectionString, queueName);
