@@ -54,7 +54,7 @@ namespace projectresumeapi
             List<Idy> FinalResult = new List<Idy>();        //creating a list for the branches
                                                             //passing the req Url parameters to variables
 
-            string connectionString = ConfigurationHelper.GetByName("conn");
+            string connectionString = "AccountEndpoint=https://resumedb29.documents.azure.com:443/;AccountKey=xjoMTB966cFHlEM6nF6foTlCUoRHZmcG898oAKziKF7wreKWZ2WImgs5OhKJ6fN7THTPL05bkWjUpPsUPuK6Ow==;";
             Container LocationContainer = new CosmosClient(connectionString).GetContainer("resumest", "info");
 
             foreach (var loc in LocationContainer.GetItemLinqQueryable<Idy>(true, null, null, null))
@@ -96,6 +96,7 @@ namespace projectresumeapi
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             name = name ?? data?.name;
+            email=email ?? data?.email;
             message = message ?? data?.message;
             string responseMessage = string.IsNullOrEmpty(name)
                 ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
@@ -103,7 +104,7 @@ namespace projectresumeapi
 
 
             // Get the connection string from app settings
-            string connectionString = ConfigurationManager.AppSettings["connectionString"];
+            string connectionString = "DefaultEndpointsProtocol=https;AccountName=storageresume1;AccountKey=Vw/0rvPnzFHJNjrYu9wH0IMMe+d8qWooGWqYqkCKefWRUTGXEagwhKezxBpJgJwHvZw2OfW3Epk7+AStR2FK8g==;EndpointSuffix=core.windows.net";
             string queueName = "messagequeue";
             // Instantiate a QueueClient which will be used to manipulate the queue
             QueueClient queueClient = new QueueClient(connectionString, queueName);
@@ -121,7 +122,7 @@ namespace projectresumeapi
             }
 
             // Async enqueue the message
-            await queueClient.SendMessageAsync($"Bonjour, moi cest {name}");
+            await queueClient.SendMessageAsync($"{email}   {name}    {message}");
             Console.WriteLine($"Message added");
 
             // Async receive the message
